@@ -24,25 +24,6 @@ app.get('/', (req, res) => {
   res.send('<h1>Login and Register BackEnd..! </h1>')
 })
 
-app.get('/users', authenticatedUsers, (req, res) => {
-  mongoClient.connect(dbURL, (err, client) => {
-    if (err) throw err
-    let db = client.db('registerDetails')
-    db.collection('users')
-      .find()
-      .toArray()
-      .then(data => {
-        res.status(200).json(data)
-      })
-      .catch(err => {
-        res.status(404).json({
-          message: 'No data Found or some error happen',
-          error: err
-        })
-      })
-  })
-})
-
 app.post('/register', (req, res) => {
   mongoClient.connect(dbURL, (err, client) => {
     if (err) throw err
@@ -106,7 +87,7 @@ app.post('/login', (req, res) => {
 app.get('/home', authenticatedUsers, (req, res) => {
   res
     .status(200)
-    .json({ message: 'Only Authenticated users can see this message..!!!' })
+    .json({ message: 'Welcome To Home Page..!!!' })
 })
 
 function authenticatedUsers (req, res, next) {
@@ -120,7 +101,7 @@ function authenticatedUsers (req, res, next) {
       'uzKfyTDx4v5z6NSV',
       (err, decodedString) => {
         if (decodedString == undefined) {
-          res.status(401).json({ message: 'Invalid Token' })
+          res.status(401).json({ message: 'Please Login To See This Page...!!!' })
         } else {
           console.log(decodedString)
           next()
